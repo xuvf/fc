@@ -13,7 +13,7 @@ def main(file):
     uknumber = rule.findall(raw_text)
     for i in range(len(uknumber)):
         if (len(uknumber[i])<14):
-            result.append(uknumber[i])        
+            result.append(uknumber[i])
     
     print(len(result))
 
