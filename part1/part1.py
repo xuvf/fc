@@ -12,6 +12,7 @@ def main(file):
     rule = re.compile(r"\+44\d{10,}")
     uknumber = rule.findall(raw_text)
     uknumber.sort()
+    
     for i in range(len(uknumber)):
         if (len(uknumber[i])<14):
             result += "0" + uknumber[i][3:7] + " " + uknumber[i][7:] + "\n"
