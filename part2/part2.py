@@ -24,6 +24,9 @@ class Point:
     def getY(self):
         return self.__y
 
+    def equals(self,point):
+        return self.__x == point.getX() and self.__y == point.getY()
+
     def distance(self, point):
         return math.sqrt((point.getX() - self.__x)**2 + (point.getY() - self.__y)**2)
 
@@ -40,7 +43,7 @@ class Circle:
         self.__radius = radius
 
     def __str__(self):
-        return "This circle has its centre at (%s,%s) and the side length is %s." % (self.__centre.getX(),self.__centre.getY(),self.__radius)
+        return "This circle has its centre at (%s,%s) and a radius of %s." % (self.__centre.getX(),self.__centre.getY(),self.__radius)
 
     def setCentre(self,centre):
         self.__centre = centre
@@ -55,10 +58,15 @@ class Circle:
         return self.__radius
 
     def area(self):
-        return math.pi*(radius^2)
+        return math.pi*(self.__radius**2)
 
     def compare(self,shape):
-        pass #your code here
+        if self.area() < shape.area() :
+            return -1
+        elif self.area() == shape.area() :
+            return 0
+        elif self.area() > shape.area() :
+            return 1
 
     def envelops(self,shape):
         pass #your code here
@@ -93,7 +101,12 @@ class Square:
         return self.__length**2
 
     def compare(self,shape):
-        pass #your code here
+        if self.area() < shape.area() :
+            return -1
+        elif self.area() == shape.area() :
+            return 0
+        elif self.area() > shape.area() :
+            return 1
 
     def envelops(self,shape):
         pass #your code here
@@ -102,37 +115,45 @@ class Square:
         return self.__top_left == square.getTopLeft() and self.__length == square.getLength()
 
 class Assignment:
+    __circleList = []
+    __squareList = []
 
     def analyse(self, filename):
-        """ Process the file here """
-        pass #your code here
+        f = open(filename,"r")
+        data = []
+        for line in f :
+            data = line.replace("\n","").split(" ")
+            if (data[0] == "circle"):
+                self.__circleList.append(Circle(Point(float(data[1]),float(data[2])),float(data[3])))
+            elif (data[0] == "square"):
+                self.__squareList.append(Square(Point(float(data[1]),float(data[2])),float(data[3])))
 
     def shape_count(self):
-        pass #your code here
+        return len(self.__circleList)+len(self.__squareList)
 
     def circle_count(self):
-        pass #your code here
+        return len(self.__circleList)
 
     def square_count(self):
-        pass #your code here
+        return len(self.__squareList)
 
     def max_circle_area(self):
-        pass #your code here
+        return max(map(lambda x : x.area(), self.__circleList))
 
     def min_circle_area(self):
-        pass #your code here
+        return min(map(lambda x : x.area(), self.__circleList))
 
     def max_square_area(self):
-        pass #your code here
+        return max(map(lambda x : x.area(), self.__squareList))
 
     def min_square_area(self):
-        pass #your code here
+        return min(map(lambda x : x.area(), self.__squareList))
 
     def mean_circle_area(self):
-        pass #your code here
+        return sum(map(lambda x : x.area(), self.__circleList))/len(self.__circleList)
 
     def mean_square_area(self):
-        pass #your code here
+        return sum(map(lambda x : x.area(), self.__squareList))/len(self.__squareList)
 
     def std_dev_circle_area(self):
         pass #your code here
@@ -151,9 +172,9 @@ if __name__ == "__main__":
     #You should add your own code heere to test your work
     print ("=== Testing Part 2 ===")
     point = Point(1.2,3.2)
-    circle1 = Square(point,21.9)
-    circle2 = Square(point,21.0)
-    print(circle1.equals(circle2))
-    #assignment = Assignment()
-    #assignment.analyse("SmallShapeTest.data")
-    #print(assignment.shape_count())
+    circle1 = Circle(point,21.9)
+    circle2 = Circle(point,22.0)
+    print(circle1.area())
+    assignment = Assignment()
+    assignment.analyse("smallshapetest.data")
+    print(assignment.max_circle_area())
