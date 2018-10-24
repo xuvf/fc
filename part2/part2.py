@@ -5,38 +5,57 @@
 import math
 
 class Point:
-    """"""
+    __x = 0.0
+    __y = 0.0
+
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.__x = x
+        self.__y = y
 
     def setX(self,x):
-        self.x = x
+        self.__x = x
 
     def setY(self,y):
-        self.y = y
+        self.__y = y
 
     def getX(self):
-        return self.x
+        return self.__x
 
     def getY(self):
-        return self.y
+        return self.__y
 
     def distance(self, point):
-        return math.sqrt((point.x - self.x)^2 + (point.y - self.y)^2)
+        return math.sqrt((point.getX() - self.__x)**2 + (point.getY() - self.__y)**2)
 
 class Shape:
     """This class is a convenient place to store the tolerance variable"""
     TOLERANCE = 1.0e-6
 
 class Circle:
+    __centre = Point(0,0)
+    __radius = 0
 
     def __init__(self,centre,radius):
-        self.centre = centre
-        self.radius = radius
+        self.__centre = centre
+        self.__radius = radius
+
+    def __str__(self):
+        return "This circle has its centre at (%s,%s) and the side length is %s." % (self.__centre.getX(),self.__centre.getY(),self.__radius)
+
+    def setCentre(self,centre):
+        self.__centre = centre
+
+    def setRadius(self,radius):
+        self.__radius = radius
+
+    def getCentre(self):
+        return self.__centre
+
+    def getRadius(self):
+        return self.__radius
 
     def area(self):
-        return
+        return math.pi*(radius^2)
 
     def compare(self,shape):
         pass #your code here
@@ -45,15 +64,33 @@ class Circle:
         pass #your code here
 
     def equals(self, circle):
-        pass #your code here
+        return self.__centre == circle.getCentre() and self.__radius == circle.getRadius()
 
 class Square:
+    __top_left = Point(0,0)
+    __length = 0
 
     def __init__(self,top_left,length):
-        pass #your code here
+        self.__top_left = top_left
+        self.__length = length
+
+    def __str__(self):
+        return "This square’s top left corner is at (%s,%s) and the side length is %s ." % (self.__top_left.getX(),self.__top_left.getY(),self.__length)
+
+    def setTopLeft(self,top_left):
+        self.__top_left = top_left
+
+    def setLength(self,length):
+        self.__length = length
+
+    def getTopLeft(self):
+        return self.__top_left
+
+    def getLength(self):
+        return self.__length
 
     def area(self):
-        pass #your code here
+        return self.__length**2
 
     def compare(self,shape):
         pass #your code here
@@ -62,7 +99,7 @@ class Square:
         pass #your code here
 
     def equals(self, square):
-        pass #your code here
+        return self.__top_left == square.getTopLeft() and self.__length == square.getLength()
 
 class Assignment:
 
@@ -112,7 +149,11 @@ class Assignment:
 
 if __name__ == "__main__":
     #You should add your own code heere to test your work
-    print "=== Testing Part 2 ==="
-    assignment = Assignment()
-    assignment.analyse("SmallShapeTest.data")
-    print(assignment.shape_count())
+    print ("=== Testing Part 2 ===")
+    point = Point(1.2,3.2)
+    circle1 = Square(point,21.9)
+    circle2 = Square(point,21.0)
+    print(circle1.equals(circle2))
+    #assignment = Assignment()
+    #assignment.analyse("SmallShapeTest.data")
+    #print(assignment.shape_count())
