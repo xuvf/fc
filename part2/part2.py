@@ -69,7 +69,23 @@ class Circle:
             return 1
 
     def envelops(self,shape):
-        pass #your code here
+        print(abs(shape.getRadius() - self.__radius))
+        print(self.__centre.distance(shape.getCentre()))
+        if type(shape) == Circle:
+            if  self.__radius - shape.getRadius() >= self.__centre.distance(shape.getCentre()):
+                return True
+            else : 
+                return False
+        else:
+            top_leftX = shape.getTopLeft().getX()
+            top_leftY = shape.getTopLeft().getY()
+            length = shape.getLength()
+            disList = [shape.getTopLeft(),Point(top_leftX + length, top_leftY),Point(top_leftX,top_leftY-length),Point(top_leftX+length,top_leftY-length)]
+            disList = list(map(lambda x : x.distance(self.__centre) > self.__radius, disList))
+            if True in disList:
+                return False
+            else:
+                return True
 
     def equals(self, circle):
         return self.__centre == circle.getCentre() and self.__radius == circle.getRadius()
@@ -181,11 +197,12 @@ class Assignment:
 if __name__ == "__main__":
     #You should add your own code heere to test your work
     print ("=== Testing Part 2 ===")
-    point = Point(1.2,3.2)
+    point = Point(0,0)
     circle1 = Circle(point,21.9)
-    circle2 = Circle(point,22.0)
+    square = Circle(point,20)
+    print(square.envelops(circle1))
     #print(circle1.area())
-    assignment = Assignment()
-    assignment.analyse("smallshapetest.data")
+    #assignment = Assignment()
+    #assignment.analyse("smallshapetest.data")
     #assignment.analyse("test.data")
-    print(assignment.median_square_area())
+    #print(assignment.median_square_area())
