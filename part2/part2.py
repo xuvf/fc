@@ -58,7 +58,7 @@ class Circle:
         return self.__radius
 
     def area(self):
-        return math.pi*(self.__radius**2)
+        return 2*math.pi*(self.__radius**2)
 
     def compare(self,shape):
         if self.area() < shape.area() :
@@ -162,10 +162,20 @@ class Assignment:
         pass #your code here
 
     def median_circle_area(self):
-        pass #your code here
+        circleList = list(map(lambda x : x.area(), self.__circleList))
+        circleList.sort()
+        if len(circleList) % 2:
+            return circleList[int((len(circleList)-1)/2)]
+        else:
+            return (circleList[int(len(circleList)/2 - 1)] + circleList[int(len(circleList)/2)])/2
 
     def median_square_area(self):
-        pass #your code here
+        squareList = list(map(lambda x : x.area(), self.__squareList))
+        squareList.sort()
+        if len(squareList) % 2:
+            return squareList[int((len(squareList)-1)/2)]
+        else:
+            return (squareList[int(len(squareList)/2 - 1)] + squareList[int(len(squareList)/2)])/2
 
 
 if __name__ == "__main__":
@@ -174,7 +184,8 @@ if __name__ == "__main__":
     point = Point(1.2,3.2)
     circle1 = Circle(point,21.9)
     circle2 = Circle(point,22.0)
-    print(circle1.area())
+    #print(circle1.area())
     assignment = Assignment()
     assignment.analyse("smallshapetest.data")
-    print(assignment.max_circle_area())
+    #assignment.analyse("test.data")
+    print(assignment.median_square_area())
