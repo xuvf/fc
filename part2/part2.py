@@ -58,7 +58,7 @@ class Circle:
         return self.__radius
 
     def area(self):
-        return 2*math.pi*(self.__radius**2)
+        return math.pi*(self.__radius**2)
 
     def compare(self,shape):
         if self.area() < shape.area() :
@@ -69,19 +69,17 @@ class Circle:
             return 1
 
     def envelops(self,shape):
-        print(abs(shape.getRadius() - self.__radius))
-        print(self.__centre.distance(shape.getCentre()))
-        if type(shape) == Circle:
+        if type(shape) == Circle :
             if  self.__radius - shape.getRadius() >= self.__centre.distance(shape.getCentre()):
                 return True
-            else : 
+            else :
                 return False
         else:
             top_leftX = shape.getTopLeft().getX()
             top_leftY = shape.getTopLeft().getY()
             length = shape.getLength()
             disList = [shape.getTopLeft(),Point(top_leftX + length, top_leftY),Point(top_leftX,top_leftY-length),Point(top_leftX+length,top_leftY-length)]
-            disList = list(map(lambda x : x.distance(self.__centre) > self.__radius, disList))
+            disList = list(map(lambda x : x.distance(self.__centre) >= self.__radius, disList))
             if True in disList:
                 return False
             else:
@@ -125,7 +123,21 @@ class Square:
             return 1
 
     def envelops(self,shape):
-        pass #your code here
+        top_leftX = self.__top_left.getX()
+        top_leftY = self.__top_left.getY()
+        length = self.__length
+
+        if type(shape) == Circle:
+            disList = [self.__top_left,Point(top_leftX + length, top_leftY),Point(top_leftX,top_leftY-length),Point(top_leftX+length,top_leftY-length)]
+            disList = list(map(lambda x : x.distance(shape.getCentre()) >= shape.getRadius(), disList))
+            print(disList)
+            if False in disList:
+                return False
+            else:
+                return True
+        else:
+            return top_leftX <= shape.getTopLeft().getX() and top_leftY >= shape.getTopLeft().getY() and top_leftX + length >= shape.getTopLeft().getX() + shape.getLength() and top_leftY <= shape.getTopLeft().getY() + shape.getLength()
+
 
     def equals(self, square):
         return self.__top_left == square.getTopLeft() and self.__length == square.getLength()
@@ -139,9 +151,9 @@ class Assignment:
         data = []
         for line in f :
             data = line.replace("\n","").split(" ")
-            if (data[0] == "circle"):
+            if (data[0] == "circle" and data[3] != 0):
                 self.__circleList.append(Circle(Point(float(data[1]),float(data[2])),float(data[3])))
-            elif (data[0] == "square"):
+            elif (data[0] == "square" and data[3] != 0):
                 self.__squareList.append(Square(Point(float(data[1]),float(data[2])),float(data[3])))
 
     def shape_count(self):
@@ -172,7 +184,8 @@ class Assignment:
         return sum(map(lambda x : x.area(), self.__squareList))/len(self.__squareList)
 
     def std_dev_circle_area(self):
-        pass #your code here
+        meanArea = self.mean_circle_area()
+        return list(map(lambda x : (x.area() - meanArea)**2, self.__circleList))
 
     def std_dev_square_area(self):
         pass #your code here
@@ -197,12 +210,14 @@ class Assignment:
 if __name__ == "__main__":
     #You should add your own code heere to test your work
     print ("=== Testing Part 2 ===")
-    point = Point(0,0)
-    circle1 = Circle(point,21.9)
-    square = Circle(point,20)
-    print(square.envelops(circle1))
+    #centre = Point(2,1)
+    #top_left = Point(-1,1)
+    #square1 = Square(centre,1)
+    #square2 = Square(top_left,2)
+    #print(square2.envelops(square1))
     #print(circle1.area())
-    #assignment = Assignment()
-    #assignment.analyse("smallshapetest.data")
+    assignment = Assignment()
+    #assignment.analyse("1000shapetest.data")
+    assignment.analyse("smallshapetest.data")
     #assignment.analyse("test.data")
-    #print(assignment.median_square_area())
+    print(assignment.std_dev_circle_area())
