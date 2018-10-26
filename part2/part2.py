@@ -184,11 +184,10 @@ class Assignment:
         return sum(map(lambda x : x.area(), self.__squareList))/len(self.__squareList)
 
     def std_dev_circle_area(self):
-        meanArea = self.mean_circle_area()
-        return list(map(lambda x : (x.area() - meanArea)**2, self.__circleList))
+        return math.sqrt(sum(map(lambda x : (x.area() - self.mean_circle_area())**2, self.__circleList))/self.circle_count())
 
     def std_dev_square_area(self):
-        pass #your code here
+        return math.sqrt(sum(map(lambda x : (x.area() - self.mean_square_area())**2, self.__squareList))/self.square_count())
 
     def median_circle_area(self):
         circleList = list(map(lambda x : x.area(), self.__circleList))

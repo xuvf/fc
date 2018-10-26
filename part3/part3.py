@@ -54,18 +54,22 @@ class GameBoard:
     """ This class represents the gameboard itself. 
         You are requried to complete this class.
     """
-
+    width = 0
+    height = 0
+    board = [[]]
     def __init__(self,width,height):
         """ The constructor for setting up the gameboard """
-        pass #your code here
+        self.width = width
+        self.height = height
+        self.board = [["-" for col in range(width)] for row in range(height)]
 
     def set_tile(self,x,y,tile):
         """ Places a tile at a location on the board. """
-        pass #your code here
+        self.board[x-1][y-1] = tile
 
     def get_tile(self,x,y):
         """ Returns the tile at a location on the board """    
-        pass #your code here
+        return self.board[x-1][y-1]
 
     def remove_tile(self,x,y):
         """ Removes the tile from the board and returns the tile"""    
@@ -88,8 +92,6 @@ class GameBoard:
         """ Prints a visual representation of the board
             Please use the - character for unused spaces
         """
-        pass #your code here
-        
 
     def letters_placed(self):
         """ Returns a count of all letters currently on the board """
@@ -108,8 +110,11 @@ if __name__ == "__main__":
     board.set_tile(2,1,e)
     board.set_tile(3,1,m)
     board.set_tile(4,1,o)
+
+
     
-    print "There are {} letters placed on the board.".format(board.letters_placed())
+    print ("There are {} letters placed on the board.".format(board.letters_placed()))
+    #board.print_board()
 
     # Uncomment below once you have implemented get_words
     # print "=== Words ==="
