@@ -130,7 +130,6 @@ class Square:
         if type(shape) == Circle:
             disList = [self.__top_left,Point(top_leftX + length, top_leftY),Point(top_leftX,top_leftY-length),Point(top_leftX+length,top_leftY-length)]
             disList = list(map(lambda x : x.distance(shape.getCentre()) >= shape.getRadius(), disList))
-            print(disList)
             if False in disList:
                 return False
             else:

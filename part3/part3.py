@@ -12,13 +12,13 @@ class LetterTile:
     """ This class is complete. You do not have to do anything to complete this class """
     def __init__(self, letter):
         self.letter = letter.lower()
-    
-        
+
+
     def get_letter(self):
         """ Returns the letter associatedd with this tile. """
         return self.letter
-   
-    def get_score(self):    
+
+    def get_score(self):
         """ Returns the score asscoiated with the letter tile """
         return {
            'a' :  1,
@@ -51,7 +51,7 @@ class LetterTile:
 
 
 class GameBoard:
-    """ This class represents the gameboard itself. 
+    """ This class represents the gameboard itself.
         You are requried to complete this class.
     """
     width = 0
@@ -61,58 +61,88 @@ class GameBoard:
         """ The constructor for setting up the gameboard """
         self.width = width
         self.height = height
-        self.board = [["-" for col in range(width)] for row in range(height)]
+        self.board = [[LetterTile("-") for col in range(width)] for row in range(height)]
 
     def set_tile(self,x,y,tile):
         """ Places a tile at a location on the board. """
         self.board[x-1][y-1] = tile
 
     def get_tile(self,x,y):
-        """ Returns the tile at a location on the board """    
+        """ Returns the tile at a location on the board """
         return self.board[x-1][y-1]
 
     def remove_tile(self,x,y):
-        """ Removes the tile from the board and returns the tile"""    
-        pass #your code here
-        
+        """ Removes the tile from the board and returns the tile"""
+        r_tile = self.get_tile(x,y)
+        self.set_tile(x,y,LetterTile("-"))
+        return r_tile
+
     def get_words(self):
-        """ Retuns a list of the words on the board sorted in alphabetic order. 
-        
+        """ Retuns a list of the words on the board sorted in alphabetic order.
+
         """
-        pass #your code here
-    
+        temp1 =str()
+        temp2 =str()
+        result_list = []
+        for i in range(self.width):
+            for j in range(self.height):
+                temp1 += self.board[i][j].get_letter()
+                temp2 += self.board[j][i].get_letter()
+            temp1 += "-"
+            temp2 += "-"
+        temp = (temp1+temp2).split("-")
+
+        for i in range(len(temp)):
+            if len(temp[i])>1:
+                result_list.append(temp[i])
+
+        return sorted(result_list)
+
     def top_scoring_words(self):
-        """ Returns a list of the top scoring words. 
+        """ Returns a list of the top scoring words.
             If there is a single word, then the function should return a single item list.
-            If multilpe words share the highest score, then the list should contain the words sorted alphabetically.     
+            If multilpe words share the highest score, then the list should contain the words sorted alphabetically.
         """
         pass #your code here
-        
+
     def print_board(self):
         """ Prints a visual representation of the board
             Please use the - character for unused spaces
         """
+        temp = str()
+        for i in range(self.width):
+            temp += " "+ "——"*2*self.width + "\n"
+            for j in range(self.height):
+                temp += " | "+self.board[i][j].get_letter()
+            temp += " |\n"
+        temp += " "+ "——"*2*self.width
+        print(temp)
 
     def letters_placed(self):
         """ Returns a count of all letters currently on the board """
-        pass #your code here
-        
+        word_count = 0
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.board[i][j].get_letter() != "-":
+                    word_count += 1
+        return word_count
+
 if __name__ == "__main__":
     """ This is just a sample for testing you might want to add your own tests here """
     board = GameBoard(10,10);
-    
+
     d = LetterTile("d")
     e = LetterTile("e")
     m = LetterTile("m")
     o = LetterTile("o")
-    
+
     board.set_tile(1,1,d)
     board.set_tile(2,1,e)
     board.set_tile(3,1,m)
     board.set_tile(4,1,o)
 
+    print(board.get_words())
 
-    
     print ("There are {} letters placed on the board.".format(board.letters_placed()))
     #board.print_board()
 
@@ -120,7 +150,7 @@ if __name__ == "__main__":
     # print "=== Words ==="
     # for word in board.get_words():
     #     print(word)
-    
+
     # Uncomment below once you have implmented top_scoring_words
     # print "=== Top Scoring Words ==="
     # for word in board.top_scoring_words():
