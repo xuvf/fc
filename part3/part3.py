@@ -103,7 +103,19 @@ class GameBoard:
             If there is a single word, then the function should return a single item list.
             If multilpe words share the highest score, then the list should contain the words sorted alphabetically.
         """
-        pass #your code here
+        words = self.get_words()
+        scores_words_dict = {}
+        scores_list = list(map (lambda x :(sum(map(lambda y : LetterTile(y).get_score(), x))),words))
+        top_score = max(scores_list)
+
+        for i in range(len(words)):
+            if scores_words_dict.__contains__(scores_list[i]):
+                scores_words_dict[scores_list[i]].append(words[i])
+            else:
+                scores_words_dict.update({scores_list[i]:[words[i]]})
+
+
+        return scores_words_dict[top_score]
 
     def print_board(self):
         """ Prints a visual representation of the board
@@ -129,22 +141,24 @@ class GameBoard:
 
 if __name__ == "__main__":
     """ This is just a sample for testing you might want to add your own tests here """
-    board = GameBoard(10,10);
+    # board = GameBoard(10,10);
 
-    d = LetterTile("d")
-    e = LetterTile("e")
-    m = LetterTile("m")
-    o = LetterTile("o")
+    # d = LetterTile("d")
+    # e = LetterTile("e")
+    # m = LetterTile("m")
+    # o = LetterTile("o")
 
-    board.set_tile(1,1,d)
-    board.set_tile(2,1,e)
-    board.set_tile(3,1,m)
-    board.set_tile(4,1,o)
+    # board.set_tile(1,1,d)
+    # board.set_tile(2,1,e)
+    # board.set_tile(3,1,m)
+    # board.set_tile(4,1,o)
 
-    print(board.get_words())
+    # print(board.get_words())
+    # print(board.top_scoring_words())
 
-    print ("There are {} letters placed on the board.".format(board.letters_placed()))
-    #board.print_board()
+
+    # print ("There are {} letters placed on the board.".format(board.letters_placed()))
+    # board.print_board()
 
     # Uncomment below once you have implemented get_words
     # print "=== Words ==="
@@ -155,3 +169,52 @@ if __name__ == "__main__":
     # print "=== Top Scoring Words ==="
     # for word in board.top_scoring_words():
     #     print(word)
+
+
+    
+    #My own test 
+    # board = GameBoard(6,6)
+
+    # a = LetterTile("a")
+    # b = LetterTile("b")
+    # d = LetterTile("d")
+    # m = LetterTile("m")
+    # t = LetterTile("t")
+    # o = LetterTile("o")
+    # l = LetterTile("l")
+    # e = LetterTile("e")
+    # s = LetterTile("s")
+    # z = LetterTile("z")
+    # p = LetterTile("p")
+    # n = LetterTile("n")
+    # v = LetterTile("v")
+
+    # board.set_tile(1,1,a)
+    # board.set_tile(1,2,d)
+    # board.set_tile(1,3,a)
+    # board.set_tile(1,4,m)
+    # board.set_tile(1,6,t)
+    # board.set_tile(2,4,o)
+    # board.set_tile(2,6,a)
+    # board.set_tile(3,1,s)
+    # board.set_tile(3,2,a)
+    # board.set_tile(3,3,n)
+    # board.set_tile(3,4,d)
+    # board.set_tile(3,6,b)
+    # board.set_tile(4,1,z)
+    # board.set_tile(4,4,l)
+    # board.set_tile(4,6,l)
+    # board.set_tile(5,1,z)
+    # board.set_tile(5,4,e)
+    # board.set_tile(5,5,v)
+    # board.set_tile(5,6,e)
+    # board.set_tile(6,1,p)
+
+
+    # board.print_board()
+
+    # for word in board.get_words():
+    #      print(word)
+
+    # for word in board.top_scoring_words():
+    #      print(word)
