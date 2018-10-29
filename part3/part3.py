@@ -81,15 +81,19 @@ class GameBoard:
         """ Retuns a list of the words on the board sorted in alphabetic order.
 
         """
-        temp1 =str()
-        temp2 =str()
+        temp1 = str()
+        temp2 = str()
         result_list = []
+        for i in range(self.height):
+            for j in range(self.width):
+                temp1 += self.board[i][j].get_letter()
+            temp1 += "-"
+        
         for i in range(self.width):
             for j in range(self.height):
-                temp1 += self.board[i][j].get_letter()
                 temp2 += self.board[j][i].get_letter()
-            temp1 += "-"
             temp2 += "-"
+
         temp = (temp1+temp2).split("-")
 
         for i in range(len(temp)):
@@ -109,7 +113,7 @@ class GameBoard:
         top_score = max(scores_list)
 
         for i in range(len(words)):
-            if scores_words_dict.__contains__(heightscores_list[i]):
+            if scores_words_dict.__contains__(scores_list[i]):
                 scores_words_dict[scores_list[i]].append(words[i])
             else:
                 scores_words_dict.update({scores_list[i]:[words[i]]})
@@ -172,7 +176,7 @@ if __name__ == "__main__":
 
 
     #My own test
-    board = GameBoard(6,6)
+    board = GameBoard(10,10)
 
     a = LetterTile("a")
     b = LetterTile("b")
@@ -212,8 +216,9 @@ if __name__ == "__main__":
 
     board.print_board()
 
-    # for word in board.get_words():
-    #      print(word)
+    for word in board.get_words():
+         print(word)
 
-    # for word in board.top_scoring_words():
-    #      print(word)
+    print("----------------------")
+    for word in board.top_scoring_words():
+         print(word)
