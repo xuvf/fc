@@ -65,11 +65,11 @@ class GameBoard:
 
     def set_tile(self,x,y,tile):
         """ Places a tile at a location on the board. """
-        self.board[x-1][y-1] = tile
+        self.board[y-1][x-1] = tile
 
     def get_tile(self,x,y):
         """ Returns the tile at a location on the board """
-        return self.board[x-1][y-1]
+        return self.board[y-1][x-1]
 
     def remove_tile(self,x,y):
         """ Removes the tile from the board and returns the tile"""
@@ -123,11 +123,11 @@ class GameBoard:
         """
         temp = str()
         for i in range(self.width):
-            temp += " "+ "——"*2*self.width + "\n"
+            temp += " "+ "-"*4*self.width + "\n"
             for j in range(self.height):
                 temp += " | "+self.board[i][j].get_letter()
             temp += " |\n"
-        temp += " "+ "——"*2*self.width
+        temp += " "+ "-"*4*self.width
         print(temp)
 
     def letters_placed(self):

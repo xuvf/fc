@@ -5,72 +5,68 @@
 import math
 
 class Point:
-    __x = 0.0
-    __y = 0.0
 
     def __init__(self, x, y):
-        self.__x = x
-        self.__y = y
+        self.x = x
+        self.y = y
 
     def setX(self,x):
-        self.__x = x
+        self.x = x
 
     def setY(self,y):
-        self.__y = y
+        self.y = y
 
     def getX(self):
-        return self.__x
+        return self.x
 
     def getY(self):
-        return self.__y
+        return self.y
 
     def equals(self,point):
-        return self.__x == point.getX() and self.__y == point.getY()
+        return abs(self.x - point.getX()) <= Shape.TOLERANCE and abs(self.y - point.getY()) <= Shape.TOLERANCE
 
     def distance(self, point):
-        return math.sqrt((point.getX() - self.__x)**2 + (point.getY() - self.__y)**2)
+        return math.sqrt((point.getX() - self.x)**2 + (point.getY() - self.y)**2)
 
 class Shape:
     """This class is a convenient place to store the tolerance variable"""
     TOLERANCE = 1.0e-6
 
 class Circle:
-    __centre = Point(0,0)
-    __radius = 0
 
     def __init__(self,centre,radius):
-        self.__centre = centre
-        self.__radius = radius
+        self.centre = centre
+        self.radius = radius
 
     def __str__(self):
-        return "This circle has its centre at (%s,%s) and a radius of %s." % (self.__centre.getX(),self.__centre.getY(),self.__radius)
+        return "This circle has its centre at (%s,%s) and a radius of %s." % (self.centre.getX(),self.centre.getY(),self.radius)
 
     def setCentre(self,centre):
-        self.__centre = centre
+        self.centre = centre
 
     def setRadius(self,radius):
-        self.__radius = radius
+        self.radius = radius
 
     def getCentre(self):
-        return self.__centre
+        return self.centre
 
     def getRadius(self):
-        return self.__radius
+        return self.radius
 
     def area(self):
-        return math.pi*(self.__radius**2)
+        return math.pi*(self.radius**2)
 
     def compare(self,shape):
-        if self.area() < shape.area() :
-            return -1
-        elif self.area() == shape.area() :
+        if abs(self.area() - shape.area()) <= Shape.TOLERANCE:
             return 0
+        elif self.area() < shape.area() :
+            return -1
         elif self.area() > shape.area() :
             return 1
 
     def envelops(self,shape):
         if type(shape) == Circle :
-            if  self.__radius - shape.getRadius() >= self.__centre.distance(shape.getCentre()):
+            if  self.radius - shape.getRadius() - self.centre.distance(shape.getCentre()) >= -Shape.TOLERANCE:
                 return True
             else :
                 return False
@@ -79,67 +75,67 @@ class Circle:
             top_leftY = shape.getTopLeft().getY()
             length = shape.getLength()
             disList = [shape.getTopLeft(),Point(top_leftX + length, top_leftY),Point(top_leftX,top_leftY-length),Point(top_leftX+length,top_leftY-length)]
-            disList = list(map(lambda x : x.distance(self.__centre) >= self.__radius, disList))
+            disList = list(map(lambda x : x.distance(self.centre) >= (self.radius+Shape.TOLERANCE) , disList))
             if True in disList:
                 return False
             else:
                 return True
 
     def equals(self, circle):
-        return self.__centre == circle.getCentre() and self.__radius == circle.getRadius()
+        return self.centre == circle.getCentre() and self.radius == circle.getRadius()
 
 class Square:
-    __top_left = Point(0,0)
-    __length = 0
 
     def __init__(self,top_left,length):
-        self.__top_left = top_left
-        self.__length = length
+        self.top_left = top_left
+        self.length = length
 
     def __str__(self):
-        return "This square’s top left corner is at (%s,%s) and the side length is %s ." % (self.__top_left.getX(),self.__top_left.getY(),self.__length)
+        return "This square’s top left corner is at (%s,%s) and the side length is %s ." % (self.top_left.getX(),self.top_left.getY(),self.length)
 
     def setTopLeft(self,top_left):
-        self.__top_left = top_left
+        self.top_left = top_left
 
     def setLength(self,length):
-        self.__length = length
+        self.length = length
 
     def getTopLeft(self):
-        return self.__top_left
+        return self.top_left
 
     def getLength(self):
-        return self.__length
+        return self.length
 
     def area(self):
-        return self.__length**2
+        return self.length**2
 
     def compare(self,shape):
-        if self.area() < shape.area() :
-            return -1
-        elif self.area() == shape.area() :
+        if abs(self.area() - shape.area()) <= Shape.TOLERANCE :
             return 0
+        elif self.area() < shape.area() :
+            return -1
         elif self.area() > shape.area() :
             return 1
 
     def envelops(self,shape):
-        top_leftX = self.__top_left.getX()
-        top_leftY = self.__top_left.getY()
-        length = self.__length
+        top_leftX = self.top_left.getX()
+        top_leftY = self.top_left.getY()
+        length = self.length
 
         if type(shape) == Circle:
-            disList = [self.__top_left,Point(top_leftX + length, top_leftY),Point(top_leftX,top_leftY-length),Point(top_leftX+length,top_leftY-length)]
-            disList = list(map(lambda x : x.distance(shape.getCentre()) >= shape.getRadius(), disList))
-            if False in disList:
-                return False
-            else:
-                return True
+            result = (shape.getCentre().getX() - shape.getRadius()) - top_leftX >= -Shape.TOLERANCE
+            result = result and shape.getCentre().getY() + shape.getRadius() - top_leftY <= Shape.TOLERANCE
+            result = result and shape.getCentre().getX() + shape.getRadius() - (top_leftX + length) <= Shape.TOLERANCE
+            result = result and shape.getCentre().getY() - shape.getRadius() - (top_leftY - length) >= -Shape.TOLERANCE
+            return result
         else:
-            return top_leftX <= shape.getTopLeft().getX() and top_leftY >= shape.getTopLeft().getY() and top_leftX + length >= shape.getTopLeft().getX() + shape.getLength() and top_leftY <= shape.getTopLeft().getY() + shape.getLength()
-
+            result =  top_leftX - shape.getTopLeft().getX() <= Shape.TOLERANCE
+            result = result and top_leftY - shape.getTopLeft().getY() >= -Shape.TOLERANCE
+            result = result and top_leftX + length - (shape.getTopLeft().getX() + shape.getLength()) >= -Shape.TOLERANCE
+            result = result and top_leftY - (shape.getTopLeft().getY() + shape.getLength()) <= Shape.TOLERANCE
+            return result
 
     def equals(self, square):
-        return self.__top_left == square.getTopLeft() and self.__length == square.getLength()
+        return self.top_left == square.getTopLeft() and self.length == square.getLength()
 
 class Assignment:
     __circleList = []
