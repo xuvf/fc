@@ -54,9 +54,6 @@ class GameBoard:
     """ This class represents the gameboard itself.
         You are requried to complete this class.
     """
-    width = 0
-    height = 0
-    board = [[]]
     def __init__(self,width,height):
         """ The constructor for setting up the gameboard """
         self.width = width
@@ -65,11 +62,11 @@ class GameBoard:
 
     def set_tile(self,x,y,tile):
         """ Places a tile at a location on the board. """
-        self.board[y-1][x-1] = tile
+        self.board[x-1][y-1] = tile
 
     def get_tile(self,x,y):
         """ Returns the tile at a location on the board """
-        return self.board[y-1][x-1]
+        return self.board[x-1][y-1]
 
     def remove_tile(self,x,y):
         """ Removes the tile from the board and returns the tile"""
@@ -81,26 +78,33 @@ class GameBoard:
         """ Retuns a list of the words on the board sorted in alphabetic order.
 
         """
-        temp1 = str()
-        temp2 = str()
+        temp1 = ""
+        temp2 = ""
         result_list = []
+
+
+        # append all characters from row to row 
         for i in range(self.height):
             for j in range(self.width):
                 temp1 += self.board[i][j].get_letter()
+            # append an extra character "-" for extract the word easily
             temp1 += "-"
         
+        # append all characters from column to column 
         for i in range(self.width):
             for j in range(self.height):
                 temp2 += self.board[j][i].get_letter()
+            # append an extra character "-" for extract the word easily
             temp2 += "-"
 
         temp = (temp1+temp2).split("-")
 
         for i in range(len(temp)):
+            # any valid word has at least two characters
             if len(temp[i])>1:
                 result_list.append(temp[i])
 
-        return sorted(result_list)
+        return sorted(result_list)      # return a sorted list
 
     def top_scoring_words(self):
         """ Returns a list of the top scoring words.
@@ -109,8 +113,8 @@ class GameBoard:
         """
         words = self.get_words()
         scores_words_dict = {}
-        scores_list = list(map (lambda x :(sum(map(lambda y : LetterTile(y).get_score(), x))),words))
-        top_score = max(scores_list)
+        scores_list = list(map (lambda x :(sum(map(lambda y : LetterTile(y).get_score(), x))),words))           # calculate the scores of all words
+        top_score = max(scores_list)            # find the top scores
 
         for i in range(len(words)):
             if scores_words_dict.__contains__(scores_list[i]):
@@ -136,21 +140,21 @@ class GameBoard:
     def letters_placed(self):
         """ Returns a count of all letters currently on the board """
         word_count = 0
-        for i in range(self.width):
-            for j in range(self.height):
+        for i in range(self.height):
+            for j in range(self.width):
                 if self.board[i][j].get_letter() != "-":
                     word_count += 1
         return word_count
 
 if __name__ == "__main__":
     """ This is just a sample for testing you might want to add your own tests here """
-    board = GameBoard(10,9);
+    # board = GameBoard(10,10);
 
     # d = LetterTile("d")
     # e = LetterTile("e")
     # m = LetterTile("m")
     # o = LetterTile("o")
-    #
+    
     # board.set_tile(1,1,d)
     # board.set_tile(2,1,e)
     # board.set_tile(3,1,m)
@@ -163,13 +167,13 @@ if __name__ == "__main__":
     # print ("There are {} letters placed on the board.".format(board.letters_placed()))
     # board.print_board()
 
-    # Uncomment below once you have implemented get_words
-    # print "=== Words ==="
+    # # Uncomment below once you have implemented get_words
+    # print ("=== Words ===")
     # for word in board.get_words():
     #     print(word)
 
-    # Uncomment below once you have implmented top_scoring_words
-    # print "=== Top Scoring Words ==="
+    # # Uncomment below once you have implmented top_scoring_words
+    # print ("=== Top Scoring Words ===")
     # for word in board.top_scoring_words():
     #     print(word)
 
@@ -213,12 +217,12 @@ if __name__ == "__main__":
     board.set_tile(5,6,e)
     board.set_tile(6,1,p)
 
-
+    board.get_words()
     board.print_board()
 
-    for word in board.get_words():
-         print(word)
+    # for word in board.get_words():
+    #      print(word)
 
-    print("----------------------")
-    for word in board.top_scoring_words():
-         print(word)
+    # print("----------------------")
+    # for word in board.top_scoring_words():
+    #      print(word)

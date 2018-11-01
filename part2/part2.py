@@ -2,7 +2,7 @@
 
     Refer the the coursework assignment for instructions on how to complete this part.
 """
-import math
+import math,statistics
 
 class Point:
 
@@ -26,6 +26,8 @@ class Point:
         return abs(self.x - point.getX()) <= Shape.TOLERANCE and abs(self.y - point.getY()) <= Shape.TOLERANCE
 
     def distance(self, point):
+        '''return the distance between two points
+        '''
         return math.sqrt((point.getX() - self.x)**2 + (point.getY() - self.y)**2)
 
 class Shape:
@@ -66,11 +68,17 @@ class Circle:
 
     def envelops(self,shape):
         if type(shape) == Circle :
+            '''
+            Compare the difference of two radius and the distance between two circle's centres
+            '''
             if  self.radius - shape.getRadius() - self.centre.distance(shape.getCentre()) >= -Shape.TOLERANCE:
                 return True
             else :
                 return False
         else:
+            '''Compare the distance between the centres and four vertexs of square
+               if one of the distances is greater than the radius, this square can not be enveloped by the circle
+            '''
             top_leftX = shape.getTopLeft().getX()
             top_leftY = shape.getTopLeft().getY()
             length = shape.getLength()
@@ -122,12 +130,19 @@ class Square:
         length = self.length
 
         if type(shape) == Circle:
+            '''
+            Calculate four intersections between circle and xy-axis 
+            Then Compare the x-y of this four intersections and four edges of the square
+            '''
             result = (shape.getCentre().getX() - shape.getRadius()) - top_leftX >= -Shape.TOLERANCE
             result = result and shape.getCentre().getY() + shape.getRadius() - top_leftY <= Shape.TOLERANCE
             result = result and shape.getCentre().getX() + shape.getRadius() - (top_leftX + length) <= Shape.TOLERANCE
             result = result and shape.getCentre().getY() - shape.getRadius() - (top_leftY - length) >= -Shape.TOLERANCE
             return result
         else:
+            '''
+            Compare the top_left and bottom_right of these two squares
+            '''
             result =  top_leftX - shape.getTopLeft().getX() <= Shape.TOLERANCE
             result = result and top_leftY - shape.getTopLeft().getY() >= -Shape.TOLERANCE
             result = result and top_leftX + length - (shape.getTopLeft().getX() + shape.getLength()) >= -Shape.TOLERANCE
@@ -142,14 +157,14 @@ class Assignment:
     __squareList = []
 
     def analyse(self, filename):
-        f = open(filename,"r")
+        f = open(filename,"r")              # read the file 
         data = []
         for line in f :
             data = line.replace("\n","").split(" ")
             if (data[0] == "circle" and data[3] != 0):
-                self.__circleList.append(Circle(Point(float(data[1]),float(data[2])),float(data[3])))
+                self.__circleList.append(Circle(Point(float(data[1]),float(data[2])),float(data[3])))       # initialise a new circle object and save in the list
             elif (data[0] == "square" and data[3] != 0):
-                self.__squareList.append(Square(Point(float(data[1]),float(data[2])),float(data[3])))
+                self.__squareList.append(Square(Point(float(data[1]),float(data[2])),float(data[3])))       # initialise a new square object and save in the list
 
     def shape_count(self):
         return len(self.__circleList)+len(self.__squareList)
@@ -179,10 +194,10 @@ class Assignment:
         return sum(map(lambda x : x.area(), self.__squareList))/len(self.__squareList)
 
     def std_dev_circle_area(self):
-        return math.sqrt(sum(map(lambda x : (x.area() - self.mean_circle_area())**2, self.__circleList))/self.circle_count())
+        return statistics.stdev(map(lambda x : x.area(), self.__circleList))
 
     def std_dev_square_area(self):
-        return math.sqrt(sum(map(lambda x : (x.area() - self.mean_square_area())**2, self.__squareList))/self.square_count())
+        return statistics.stdev(map(lambda x : x.area(), self.__squareList))
 
     def median_circle_area(self):
         circleList = list(map(lambda x : x.area(), self.__circleList))
@@ -211,7 +226,7 @@ if __name__ == "__main__":
     #print(square2.envelops(square1))
     #print(circle1.area())
     assignment = Assignment()
-    #assignment.analyse("1000shapetest.data")
-    assignment.analyse("smallshapetest.data")
+    assignment.analyse("1000shapetest.data")
+    #assignment.analyse("smallshapetest.data")
     #assignment.analyse("test.data")
-    print(assignment.std_dev_circle_area())
+    print(assignment.std_dev_square_area())
